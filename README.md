@@ -1,38 +1,74 @@
-Role Name
+nginx
 =========
 
-A brief description of the role goes here.
+Installs and configures nginx.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+None.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+```yml
+redis_port:           6379
+redis_bind_interface: 127.0.0.1
+redis_unixsocket:     ''
+redis_timeout:        300
+
+redis_daemon:     redis-server
+redis_conf_path:  /etc/redis/redis.conf
+
+redis_loglevel: "notice"
+redis_logfile:  /var/log/redis/redis-server.log
+
+redis_databases: 16
+
+# Set to an empty set to disable persistence (saving the DB to disk).
+redis_save:
+  - 900 1
+  - 300 10
+  - 60 10000
+
+redis_rdbcompression: "yes"
+redis_dbfilename:     dump.rdb
+redis_dbdir:          /var/lib/redis
+
+redis_maxmemory:          0
+redis_maxmemory_policy:   "noeviction"
+redis_maxmemory_samples:  5
+
+redis_appendonly:   "no"
+redis_appendfsync:  "everysec"
+
+# Add extra include files for local configuration/overrides.
+redis_includes: []
+
+```
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+```
+bearandgiraffe.base
+```
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+```yml
+- hosts: servers
+  roles:
+    - { role: bearandgiraffe.redis, redis_port: '6379' }
+```
 
 License
 -------
 
-BSD
+The Unlicense (see LICENSE)
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Youssef Chaker (@ychaker) from Bear & Giraffe LLC (@bearandgiraffe).
